@@ -1,0 +1,22 @@
+/**
+ * Gradle task written with java syntax
+ */
+task appendFilenames << {   // Gradle task definition
+    // Task action implemented in java
+    File inputDirectory = new File("src");
+    File outputFile = new File(getBuildDir(), "allfiles.txt");
+    File outputDirectory = outputFile.getParentFile();
+
+    if (!outputDirectory.exists())
+        outputDirectory.mkdirs();
+    outputFile.createNewFile();
+    FileWriter fileWriter = new FileWriter(outputFile, true);
+
+    try {
+        File[] files = inputDirectory.listFiles();
+        for (File file : files)
+            fileWriter.write(file.getName() + "\n");
+    } finally {
+        fileWriter.close();
+    }
+}

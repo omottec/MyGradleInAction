@@ -1,0 +1,13 @@
+/**
+ * B4
+ * Project version class written in Groovy
+ */
+class ProjectVersion1 {
+    int major
+    int minor
+
+    ProjectVersion1(int major, int minor) {
+        this.major = major
+        this.minor = minor
+    }
+}

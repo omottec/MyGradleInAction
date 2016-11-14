@@ -1,0 +1,44 @@
+class ProjectVersion7 {
+    Integer major
+    Integer minor
+    Boolean release
+
+    ProjectVersion7(Integer major, Integer minor) {
+        this.major = major
+        this.minor = minor
+        this.release = Boolean.FALSE
+    }
+
+    ProjectVersion7(Integer major, Integer minor, Boolean release) {
+        this.major = major
+        this.minor = minor
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        return "$major.$minor${release ? '' : '-SNAPSHOT'}"
+    }
+}
+
+ext.versionFile = file('version.properties')
+
+task loadVersion {
+    project.version = readVersion()
+    println version
+}
+
+ProjectVersion7 readVersion() {
+    logger.quiet 'Reading the version file'
+
+    if (!versionFile.exists())
+        throw new GradleException("Required version file does not exist:$versionFile.canonicalPath")
+
+    java.util.Properties versionProps = new Properties()
+    versionFile.withInputStream { stream ->
+        versionProps.load(stream)
+    }
+    new ProjectVersion7(versionProps.major.toInteger(),
+        versionProps.minor.toInteger(),
+        versionProps.release.toBoolean())
+}

@@ -1,0 +1,32 @@
+/**
+ * 添加任意代码
+ */
+
+class ProjectVersion6 {
+    Integer major
+    Integer minor
+    Boolean release
+
+    ProjectVersion6(Integer major, Integer minor) {
+        this.major = major
+        this.minor = minor
+        this.release = Boolean.FALSE
+    }
+
+    ProjectVersion6(Integer major, Integer minor, Boolean release) {
+        this.major = major
+        this.minor = minor
+        this.release = release
+    }
+
+    @Override
+    String toString() {
+        return "$major.$minor${release ? '' : '-SNAPSHOT'}"
+    }
+}
+
+version = new ProjectVersion6(0, 1)
+
+task printVersion << {
+    println "Version: $version"
+}

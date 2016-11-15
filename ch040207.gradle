@@ -1,3 +1,5 @@
+import org.gradle.api.execution.TaskExecutionGraph
+
 class ProjectVersion7 {
     Integer major
     Integer minor
@@ -42,7 +44,11 @@ ProjectVersion7 readVersion() {
         versionProps.release.toBoolean())
 }
 
-task printVersion << {
+task release << {
+    println 'release...'
+}
+
+task printVersion(dependsOn: release) << {
     println "Version: $version"
 }
 
@@ -107,3 +113,41 @@ tasks.addRule("Pattern: increment<Classifier>Version - Increments the project " 
         }
     }
 }
+
+gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
+    if (taskGraph.hasTask(release)) {
+        println "gradle.taskGraph.whenReady release:$version.release"
+        if (!version.release) {
+            version.release = true
+            ant.propertyfile(file: versionFile) {
+                entry(key: 'release', type: 'string',
+                        operation: '=', value: 'true')
+            }
+        }
+    }
+}
+
+class ReleaseVersionListener implements TaskExecutionGraphListener {
+    static final String RELEASE_TASK_PATH = ':release'
+    @Override
+    void graphPopulated(TaskExecutionGraph graph) {
+        if (graph.hasTask(RELEASE_TASK_PATH)) {
+            def tasks = graph.allTasks;
+            def releaseTask = tasks.find {
+                it.path == RELEASE_TASK_PATH
+            }
+            def project = releaseTask.project
+            println "graphPopulated release:$project.version.release"
+            if (!project.version.release) {
+                project.version.release = true
+                project.ant.propertyfile(file: project.versionFile) {
+                    entry(key: 'release', type: 'string',
+                            operation: '=', value: 'true')
+                }
+            }
+        }
+    }
+}
+
+def releaseVersionListener = new ReleaseVersionListener()
+gradle.taskGraph.addTaskExecutionGraphListener(releaseVersionListener)

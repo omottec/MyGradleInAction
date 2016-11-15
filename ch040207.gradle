@@ -45,3 +45,16 @@ ProjectVersion7 readVersion() {
 task printVersion << {
     println "Version: $version"
 }
+
+task makeReleaseVersion(group: 'versioning',
+        description: 'Makes project a release version') {
+    inputs.property('release', version.release)
+    outputs.file versionFile
+
+    doLast {
+        version.release = true
+        ant.propertyfile(file: versionFile) {
+            entry(key: 'release', type: 'string', operation: '=', value: 'true')
+        }
+    }
+}

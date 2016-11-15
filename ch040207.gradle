@@ -25,7 +25,6 @@ ext.versionFile = file('version.properties')
 
 task loadVersion {
     project.version = readVersion()
-    println version
 }
 
 ProjectVersion7 readVersion() {
@@ -41,4 +40,8 @@ ProjectVersion7 readVersion() {
     new ProjectVersion7(versionProps.major.toInteger(),
         versionProps.minor.toInteger(),
         versionProps.release.toBoolean())
+}
+
+task printVersion << {
+    println "Version: $version"
 }

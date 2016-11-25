@@ -16,6 +16,14 @@ def chant() {
     ant.echo(message: 'Repeat after me ...')
 }
 
+task test {
+    doLast {
+        println 'test build'
+    }
+
+    println 'test config'
+}
+
 3.times {
     task "yayGradle$it" << {
         println 'Gradle rocks'

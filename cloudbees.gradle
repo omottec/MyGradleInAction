@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.cloudbees:cloudbees-api-client:1.5.9'
+    }
+}
+
+ext {
+    apiUrl = 'https://api.cloudbees.com/api'
+    apiFormat = 'xml'
+    apiVersion = '1.0'
+}
+
+if (project.hasProperty('cloudbeesApiKey'))
+    ext.apiKey = project.property('cloudbeesApiKey')
+if (project.hasProperty('cloudbeesApiSecret'))
+    ext.secret = project.property('cloudbeesApiSecret')
+
+task cloudBeesAppInfo(description: 'Returns the basic information about ' +
+        'an application.', group: 'CloudBees') {
+    inputs.property('apiKey', apiKey)
+    inputs.property('secret', secret)
+//    inputs.property('appId', appId)
+}

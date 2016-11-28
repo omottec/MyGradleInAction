@@ -1,0 +1,17 @@
+task appendFilenames << {
+    File inputDir = file("src")
+    File outputFile = new File(getBuildDir(), "allfiles.txt");
+    File outputDir = outputFile.getParentFile();
+    if (!outputDir.exists()) outputDir.mkdirs();
+    outputFile.createNewFile();
+
+    FileWriter fileWriter;
+    File[] inputFiles = inputDir.listFiles();
+    try {
+        fileWriter = new FileWriter(outputFile, true);
+        for (File file : inputFiles)
+            fileWriter.write(file.getName() + "\n");
+    } finally {
+        if (fileWriter != null) fileWriter.close();
+    }
+}

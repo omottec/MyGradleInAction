@@ -1,0 +1,11 @@
+/**
+ * Gradle task written with Groovy syntax
+ */
+task appendFileNames << {
+    def inputDir = file('src')
+    def outputFile = new File(buildDir, 'allfiles.txt')
+    def outputDir = outputFile.parentFile
+    if (!outputDir.exists()) outputDir.mkdirs()
+    outputFile.createNewFile()
+    inputDir.eachFile { outputFile << "$it.name\n" }
+}

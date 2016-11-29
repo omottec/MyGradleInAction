@@ -1,7 +1,0 @@
-/**
- * 终结器task
- */
-
-task first << { println "first" }
-task second << { println "second" }
-first.finalizedBy second

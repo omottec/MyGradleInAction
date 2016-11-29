@@ -1,3 +1,6 @@
+/**
+ * Examples of methods added by the GDK(Groovy Development Kit)
+ */
 def buildTools = ['Ant', 'Maven', 'Gradle']
 assert buildTools.find { it == 'Gradle' } == 'Gradle'
 assert buildTools.every { it.size() >= 4 } == false
